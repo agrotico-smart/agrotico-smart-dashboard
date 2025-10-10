@@ -6,6 +6,8 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['mysql2'],
   },
+  // Configuración para manejar mejor los archivos estáticos
+  trailingSlash: false,
   async headers() {
     return [
       {
