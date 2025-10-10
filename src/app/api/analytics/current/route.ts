@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { RowDataPacket } from "mysql2";
 
+// Forzar renderizado dinámico
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const robotUuid = searchParams.get('robot');
+    const robotUuid = request.nextUrl.searchParams.get('robot');
     
 
     // Construir query basado en si se especifica un robot

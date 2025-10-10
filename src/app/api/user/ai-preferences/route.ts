@@ -3,6 +3,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import pool from "@/lib/db";
 
+// Forzar renderizado dinámico
+export const dynamic = 'force-dynamic';
+
 export async function PUT(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

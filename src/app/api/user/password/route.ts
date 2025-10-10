@@ -5,6 +5,9 @@ import pool from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { RowDataPacket } from "mysql2";
 
+// Forzar renderizado dinámico
+export const dynamic = 'force-dynamic';
+
 export async function PUT(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

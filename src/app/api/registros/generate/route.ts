@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateNewRecord } from "@/actions/dashboard";
 
+// Forzar renderizado dinámico
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
 
