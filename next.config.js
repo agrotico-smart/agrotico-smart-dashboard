@@ -3,13 +3,8 @@ const nextConfig = {
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: '/api/:path*',
-      },
-    ];
+  experimental: {
+    serverComponentsExternalPackages: ['mysql2'],
   },
   async headers() {
     return [
@@ -24,6 +19,10 @@ const nextConfig = {
       },
     ];
   },
+  // Optimizaciones para Vercel
+  swcMinify: true,
+  compress: true,
+  poweredByHeader: false,
 };
 
 module.exports = nextConfig;
