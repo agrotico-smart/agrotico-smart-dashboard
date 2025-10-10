@@ -25,12 +25,10 @@ import { useSession } from "next-auth/react";
 import { RefreshCw, Moon, Sun, Monitor } from "lucide-react";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { useToast } from "@/hooks/use-toast";
-import { useTheme } from "next-themes";
 
 export default function SettingsPage() {
   const { data: session, status } = useSession();
   const user = session?.user;
-  const { theme, setTheme } = useTheme();
 
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -40,10 +38,12 @@ export default function SettingsPage() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [aiModel, setAiModel] = useState("deepseek-chat");
+  const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
 
   const [isSavingAccount, setIsSavingAccount] = useState(false);
   const [isSavingPassword, setIsSavingPassword] = useState(false);
   const [isSavingAI, setIsSavingAI] = useState(false);
+  const [isSavingAppearance, setIsSavingAppearance] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
   const { toast } = useToast();
 
@@ -55,6 +55,12 @@ export default function SettingsPage() {
 
       // Cargar datos completos del usuario desde la API
       loadUserData();
+    }
+
+    // Cargar tema guardado
+    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | "system" | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
     }
   }, [user]);
 
@@ -232,6 +238,31 @@ export default function SettingsPage() {
     } finally {
       setIsSavingAI(false);
     }
+  };
+
+  const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    
+    // Aplicar el tema inmediatamente
+    const root = document.documentElement;
+    if (newTheme === "dark") {
+      root.classList.add("dark");
+    } else if (newTheme === "light") {
+      root.classList.remove("dark");
+    } else {
+      // Sistema - usar preferencia del sistema
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        root.classList.add("dark");
+      } else {
+        root.classList.remove("dark");
+      }
+    }
+
+    toast({
+      title: "Tema actualizado",
+      description: `El tema se ha cambiado a ${newTheme === "system" ? "sistema" : newTheme === "dark" ? "oscuro" : "claro"}.`,
+    });
   };
 
   if (status === "loading") {
@@ -439,66 +470,60 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle>Apariencia</CardTitle>
               <CardDescription>
-                Personaliza la apariencia de tu dashboard.
+                Personaliza la apariencia de tu dashboard y elige tu tema preferido.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label className="text-base">Modo Oscuro</Label>
+                    <Label htmlFor="theme-select">Tema</Label>
                     <p className="text-sm text-muted-foreground">
-                      Cambia entre modo claro y oscuro
+                      Elige entre tema claro, oscuro o seguir la preferencia del sistema.
                     </p>
                   </div>
-                  <Switch
-                    checked={theme === "dark"}
-                    onCheckedChange={(checked) =>
-                      setTheme(checked ? "dark" : "light")
-                    }
-                  />
                 </div>
-
-                <Separator />
-
-                <div className="space-y-4">
-                  <Label className="text-base">Tema del Sistema</Label>
-                  <div className="grid grid-cols-3 gap-4">
-                    <Button
-                      variant={theme === "light" ? "default" : "outline"}
-                      onClick={() => setTheme("light")}
-                      className="flex items-center gap-2"
-                    >
-                      <Sun className="h-4 w-4" />
-                      Claro
-                    </Button>
-                    <Button
-                      variant={theme === "dark" ? "default" : "outline"}
-                      onClick={() => setTheme("dark")}
-                      className="flex items-center gap-2"
-                    >
-                      <Moon className="h-4 w-4" />
-                      Oscuro
-                    </Button>
-                    <Button
-                      variant={theme === "system" ? "default" : "outline"}
-                      onClick={() => setTheme("system")}
-                      className="flex items-center gap-2"
-                    >
-                      <Monitor className="h-4 w-4" />
-                      Sistema
-                    </Button>
+                
+                <div className="grid grid-cols-3 gap-4">
+                  <Button
+                    variant={theme === "light" ? "default" : "outline"}
+                    onClick={() => handleThemeChange("light")}
+                    className="flex flex-col items-center space-y-2 h-20"
+                  >
+                    <Sun className="h-5 w-5" />
+                    <span>Claro</span>
+                  </Button>
+                  
+                  <Button
+                    variant={theme === "dark" ? "default" : "outline"}
+                    onClick={() => handleThemeChange("dark")}
+                    className="flex flex-col items-center space-y-2 h-20"
+                  >
+                    <Moon className="h-5 w-5" />
+                    <span>Oscuro</span>
+                  </Button>
+                  
+                  <Button
+                    variant={theme === "system" ? "default" : "outline"}
+                    onClick={() => handleThemeChange("system")}
+                    className="flex flex-col items-center space-y-2 h-20"
+                  >
+                    <Monitor className="h-5 w-5" />
+                    <span>Sistema</span>
+                  </Button>
+                </div>
+              </div>
+              
+              <Separator />
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label>Configuración actual</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Tema: {theme === "system" ? "Sistema" : theme === "dark" ? "Oscuro" : "Claro"}
+                    </p>
                   </div>
-                </div>
-
-                <Separator />
-
-                <div className="space-y-2">
-                  <Label className="text-base">Configuración Actual</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Tema actual:{" "}
-                    <span className="font-medium capitalize">{theme}</span>
-                  </p>
                 </div>
               </div>
             </CardContent>

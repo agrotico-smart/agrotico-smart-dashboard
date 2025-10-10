@@ -121,6 +121,11 @@ export default function DashboardClient({
               Agrotico Smart Dashboard - Sistema de Monitoreo Agrícola
             </span>
           </p>
+          {lastUpdate && (
+            <p className="mt-1 text-xs sm:text-sm">
+              Última actualización: {lastUpdate}
+            </p>
+          )}
         </div>
       </div>
 
