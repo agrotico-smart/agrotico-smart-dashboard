@@ -15,6 +15,8 @@ export interface RobotStats {
   nombre: string;
   uuid: string;
   ubicacion: string;
+  latitud?: number;
+  longitud?: number;
   estado: string;
   ultima_actividad: string;
   total_registros: number;

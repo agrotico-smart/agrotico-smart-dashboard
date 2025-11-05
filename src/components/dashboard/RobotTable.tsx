@@ -105,8 +105,8 @@ export default function RobotTable({
               <TableCell className="px-3 sm:px-6 py-4 sm:py-6 whitespace-nowrap">
                 <div className="flex justify-center sm:justify-start">
                   <RobotLocationMap
-                    lat={9.5}
-                    lng={-84.0}
+                    lat={robot.latitud}
+                    lng={robot.longitud}
                     ubicacion={robot.ubicacion || "Costa Rica"}
                   />
                 </div>

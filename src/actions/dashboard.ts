@@ -17,6 +17,8 @@ export async function getRobotsData(): Promise<{
         r.nombre,
         r.uuid,
         r.location as ubicacion,
+        r.latitud,
+        r.longitud,
         r.estado,
         r.updated_at as ultima_actividad,
         COUNT(l.id) as total_registros,
@@ -28,7 +30,7 @@ export async function getRobotsData(): Promise<{
       LEFT JOIN lecturas l ON r.uuid = l.robot_uuid
       LEFT JOIN sensor_bmp390 sb ON l.id = sb.lectura_id
       LEFT JOIN sensor_scd30 ss ON l.id = ss.lectura_id
-      GROUP BY r.id, r.nombre, r.uuid, r.location, r.estado, r.updated_at
+      GROUP BY r.id, r.nombre, r.uuid, r.location, r.latitud, r.longitud, r.estado, r.updated_at
       ORDER BY total_registros DESC
     `
     );
@@ -38,6 +40,8 @@ export async function getRobotsData(): Promise<{
       nombre: row.nombre || "Robot Sin Nombre",
       uuid: row.uuid || "",
       ubicacion: row.ubicacion || "Ubicación No Especificada",
+      latitud: row.latitud ? parseFloat(row.latitud) : undefined,
+      longitud: row.longitud ? parseFloat(row.longitud) : undefined,
       estado: row.estado || "inactivo",
       ultima_actividad: row.ultima_actividad || new Date().toISOString(),
       total_registros: parseInt(row.total_registros) || 0,
