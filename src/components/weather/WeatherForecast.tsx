@@ -12,23 +12,28 @@ interface WeatherForecastProps {
 }
 
 export default function WeatherForecast({ region, crop, startDate }: WeatherForecastProps) {
-  // Generate mock forecast data
+  // Generate mock forecast data - deterministic based on inputs
   const forecastData = useMemo(() => {
     if (!region || !startDate) return [];
 
     const data = [];
     const baseTemp = region === "norte" ? 28 : region === "sur" ? 18 : 23;
+    // Use date as seed for deterministic variation
+    const seed = startDate.getDate() + startDate.getMonth() * 31;
     
     for (let i = 0; i < 7; i++) {
       const date = new Date(startDate);
       date.setDate(date.getDate() + i);
       
+      // Deterministic pseudo-random using seed
+      const dayVariation = Math.sin(seed + i * 2.5) * 0.5 + 0.5;
+      
       data.push({
         date: date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' }),
-        temperatura: baseTemp + Math.sin(i) * 3 + Math.random() * 2,
-        humedad: 60 + Math.random() * 20,
-        precipitacion: Math.random() * 15,
-        viento: 5 + Math.random() * 10,
+        temperatura: baseTemp + Math.sin(i) * 3 + dayVariation * 2,
+        humedad: 60 + dayVariation * 20,
+        precipitacion: dayVariation * 15,
+        viento: 5 + dayVariation * 10,
       });
     }
     

@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { CloudDrizzle, Thermometer, Sun, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { calculateYieldImpact, seededRandom } from "@/lib/weatherUtils";
 
 interface WeatherSimulatorProps {
   region: string;
@@ -39,40 +40,29 @@ export default function WeatherSimulator({ region, crop, startDate }: WeatherSim
 
     const mod = scenarioMods[scenario as keyof typeof scenarioMods] || scenarioMods.normal;
     
+    // Use date as seed for deterministic variation
+    const seed = startDate.getDate() + startDate.getMonth() * 31;
+    
     for (let i = 0; i < days; i++) {
       const date = new Date(startDate);
       date.setDate(date.getDate() + i);
       
       const tempVariation = Math.sin(i / 3) * 2 * mod.variance;
-      const precipVariation = Math.random() * 10 * mod.variance;
+      const precipVariation = seededRandom(seed, i) * 10 * mod.variance;
+      
+      const currentTemp = baseTemp + tempAdjustment[0] + mod.temp + tempVariation;
+      const currentPrecip = Math.max(0, 5 + precipAdjustment[0] + mod.precip + precipVariation);
       
       data.push({
         date: date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
-        temperatura: baseTemp + tempAdjustment[0] + mod.temp + tempVariation,
-        precipitacion: Math.max(0, 5 + precipAdjustment[0] + mod.precip + precipVariation),
-        rendimiento: calculateYieldImpact(
-          baseTemp + tempAdjustment[0] + mod.temp,
-          5 + precipAdjustment[0] + mod.precip,
-          crop
-        ),
+        temperatura: currentTemp,
+        precipitacion: currentPrecip,
+        rendimiento: calculateYieldImpact(currentTemp, currentPrecip, crop),
       });
     }
     
     return data;
   }, [region, crop, startDate, scenario, tempAdjustment, precipAdjustment, simulationDays]);
-
-  // Calculate yield impact based on weather conditions
-  function calculateYieldImpact(temp: number, precip: number, cropType: string) {
-    const optimalTemp = cropType === "cafe" ? 22 : cropType === "arroz" ? 26 : 24;
-    const tempDiff = Math.abs(temp - optimalTemp);
-    const tempImpact = Math.max(0, 100 - tempDiff * 5);
-    
-    const optimalPrecip = cropType === "arroz" ? 15 : cropType === "cafe" ? 8 : 10;
-    const precipDiff = Math.abs(precip - optimalPrecip);
-    const precipImpact = Math.max(0, 100 - precipDiff * 3);
-    
-    return (tempImpact + precipImpact) / 2;
-  }
 
   const averageYield = useMemo(() => {
     if (simulationData.length === 0) return 0;
@@ -184,9 +174,9 @@ export default function WeatherSimulator({ region, crop, startDate }: WeatherSim
           </CardHeader>
           <CardContent>
             <div className="text-center">
-              <div className="text-4xl font-bold" style={{
-                color: averageYield > 80 ? '#10b981' : averageYield > 60 ? '#f59e0b' : '#ef4444'
-              }}>
+              <div className={`text-4xl font-bold ${
+                averageYield > 80 ? 'text-green-500' : averageYield > 60 ? 'text-yellow-500' : 'text-red-500'
+              }`}>
                 {averageYield.toFixed(1)}%
               </div>
               <p className="text-sm text-gray-500 mt-2">
