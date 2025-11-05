@@ -556,7 +556,7 @@ export default function RobotCharts({
                   style: { textAnchor: "middle" },
                 }}
               />
-              <Tooltip content={<CustomTooltip />} />
+              <RechartsTooltip content={<CustomTooltip />} />
               <Line
                 type="monotone"
                 dataKey={metric.key}
@@ -594,7 +594,7 @@ export default function RobotCharts({
                   style: { textAnchor: "middle" },
                 }}
               />
-              <Tooltip content={<CustomTooltip />} />
+              <RechartsTooltip content={<CustomTooltip />} />
               <Bar
                 dataKey={metric.key}
                 fill={metric.chartColor}
@@ -629,7 +629,7 @@ export default function RobotCharts({
                   style: { textAnchor: "middle" },
                 }}
               />
-              <Tooltip content={<CustomTooltip />} />
+              <RechartsTooltip content={<CustomTooltip />} />
               <Area
                 type="monotone"
                 dataKey={metric.key}
