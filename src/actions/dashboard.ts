@@ -122,25 +122,37 @@ export async function generateNewRecord(robotUuid: string) {
     const temperatura_2m = (20 + Math.random() * 15).toFixed(2);
     const temperatura_maxima = (parseFloat(temperatura_2m) + Math.random() * 5).toFixed(2);
     const temperatura_minima = (parseFloat(temperatura_2m) - Math.random() * 5).toFixed(2);
+    const rango_temperatura = (parseFloat(temperatura_maxima) - parseFloat(temperatura_minima)).toFixed(2);
+    const temperatura_punto_rocio = (parseFloat(temperatura_2m) - Math.random() * 5).toFixed(2);
+    const temperatura_humeda = (parseFloat(temperatura_2m) - Math.random() * 3).toFixed(2);
+    const temperatura_superficie = (parseFloat(temperatura_2m) + Math.random() * 10 - 5).toFixed(2);
     const precipitacion_corregida = (Math.random() * 20).toFixed(2);
     const humedad_relativa = (40 + Math.random() * 40).toFixed(2);
+    const humedad_especifica = (parseFloat(humedad_relativa) * 0.1).toFixed(2);
     const velocidad_viento = (Math.random() * 10).toFixed(2);
     const velocidad_viento_max = (parseFloat(velocidad_viento) + Math.random() * 5).toFixed(2);
     const velocidad_viento_min = (Math.random() * 2).toFixed(2);
+    const radiacion_onda_larga = (200 + Math.random() * 200).toFixed(2);
     const radiacion_onda_corta = (Math.random() * 1000).toFixed(2);
+    const radiacion_cielo_despejado = (parseFloat(radiacion_onda_corta) * 0.9).toFixed(2);
+    const indice_claridad = (0.5 + Math.random() * 0.5).toFixed(2);
     const presion_superficie = (850 + Math.random() * 100).toFixed(2);
     const evaporacion = (Math.random() * 5).toFixed(2);
 
     await connection.execute(
       `INSERT INTO clima_satelital (
         lectura_id, robot_uuid, timestamp, temperatura_2m, temperatura_maxima, temperatura_minima,
-        precipitacion_corregida, humedad_relativa, velocidad_viento, velocidad_viento_max,
-        velocidad_viento_min, radiacion_onda_corta, presion_superficie, evaporacion
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        rango_temperatura, temperatura_punto_rocio, temperatura_humeda, temperatura_superficie,
+        precipitacion_corregida, humedad_relativa, humedad_especifica, velocidad_viento, 
+        velocidad_viento_max, velocidad_viento_min, radiacion_onda_larga, radiacion_onda_corta, 
+        radiacion_cielo_despejado, indice_claridad, presion_superficie, evaporacion
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         lecturaId, targetRobotUuid, timestamp, temperatura_2m, temperatura_maxima, temperatura_minima,
-        precipitacion_corregida, humedad_relativa, velocidad_viento, velocidad_viento_max,
-        velocidad_viento_min, radiacion_onda_corta, presion_superficie, evaporacion
+        rango_temperatura, temperatura_punto_rocio, temperatura_humeda, temperatura_superficie,
+        precipitacion_corregida, humedad_relativa, humedad_especifica, velocidad_viento, 
+        velocidad_viento_max, velocidad_viento_min, radiacion_onda_larga, radiacion_onda_corta, 
+        radiacion_cielo_despejado, indice_claridad, presion_superficie, evaporacion
       ]
     );
 
