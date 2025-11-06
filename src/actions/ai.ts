@@ -35,12 +35,20 @@ export interface SensorData {
     temperatura_2m: number;
     temperatura_maxima: number;
     temperatura_minima: number;
+    rango_temperatura: number;
+    temperatura_punto_rocio: number;
+    temperatura_humeda: number;
+    temperatura_superficie: number;
     precipitacion_corregida: number;
     humedad_relativa: number;
+    humedad_especifica: number;
     velocidad_viento: number;
     velocidad_viento_max: number;
     velocidad_viento_min: number;
+    radiacion_onda_larga: number;
     radiacion_onda_corta: number;
+    radiacion_cielo_despejado: number;
+    indice_claridad: number;
     presion_superficie: number;
     evaporacion: number;
   } | null;
@@ -124,12 +132,20 @@ export async function getCurrentSensorData(robotUuid?: string) {
         temperatura_2m: parseFloat(climateCurrent[0].temperatura_2m),
         temperatura_maxima: parseFloat(climateCurrent[0].temperatura_maxima),
         temperatura_minima: parseFloat(climateCurrent[0].temperatura_minima),
+        rango_temperatura: parseFloat(climateCurrent[0].rango_temperatura || "0"),
+        temperatura_punto_rocio: parseFloat(climateCurrent[0].temperatura_punto_rocio || "0"),
+        temperatura_humeda: parseFloat(climateCurrent[0].temperatura_humeda || "0"),
+        temperatura_superficie: parseFloat(climateCurrent[0].temperatura_superficie || "0"),
         precipitacion_corregida: parseFloat(climateCurrent[0].precipitacion_corregida),
         humedad_relativa: parseFloat(climateCurrent[0].humedad_relativa),
+        humedad_especifica: parseFloat(climateCurrent[0].humedad_especifica || "0"),
         velocidad_viento: parseFloat(climateCurrent[0].velocidad_viento),
         velocidad_viento_max: parseFloat(climateCurrent[0].velocidad_viento_max),
         velocidad_viento_min: parseFloat(climateCurrent[0].velocidad_viento_min),
+        radiacion_onda_larga: parseFloat(climateCurrent[0].radiacion_onda_larga || "0"),
         radiacion_onda_corta: parseFloat(climateCurrent[0].radiacion_onda_corta),
+        radiacion_cielo_despejado: parseFloat(climateCurrent[0].radiacion_cielo_despejado || "0"),
+        indice_claridad: parseFloat(climateCurrent[0].indice_claridad || "0"),
         presion_superficie: parseFloat(climateCurrent[0].presion_superficie),
         evaporacion: parseFloat(climateCurrent[0].evaporacion),
       } : null,
