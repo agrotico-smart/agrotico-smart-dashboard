@@ -28,14 +28,22 @@ export async function GET(request: NextRequest) {
         cs.temperatura_2m,
         cs.temperatura_maxima,
         cs.temperatura_minima,
+        cs.rango_temperatura,
+        cs.temperatura_punto_rocio,
+        cs.temperatura_humeda,
+        cs.temperatura_superficie,
         cs.precipitacion_corregida,
         cs.humedad_relativa,
+        cs.humedad_especifica,
         cs.velocidad_viento,
         cs.velocidad_viento_max,
         cs.velocidad_viento_min,
+        cs.radiacion_onda_larga,
         cs.radiacion_onda_corta,
-        cs.presion_superficie,
-        cs.evaporacion
+        cs.radiacion_cielo_despejado,
+        cs.indice_claridad,
+        cs.evaporacion,
+        cs.presion_superficie
       FROM lecturas l
       LEFT JOIN sensor_bmp390 sb ON l.id = sb.lectura_id
       LEFT JOIN sensor_scd30 ss ON l.id = ss.lectura_id
@@ -87,14 +95,22 @@ export async function GET(request: NextRequest) {
         temperatura_2m: parseFloat(row.temperatura_2m) || 0,
         temperatura_maxima: parseFloat(row.temperatura_maxima) || 0,
         temperatura_minima: parseFloat(row.temperatura_minima) || 0,
+        rango_temperatura: parseFloat(row.rango_temperatura) || 0,
+        temperatura_punto_rocio: parseFloat(row.temperatura_punto_rocio) || 0,
+        temperatura_humeda: parseFloat(row.temperatura_humeda) || 0,
+        temperatura_superficie: parseFloat(row.temperatura_superficie) || 0,
         precipitacion_corregida: parseFloat(row.precipitacion_corregida) || 0,
         humedad_relativa: parseFloat(row.humedad_relativa) || 0,
+        humedad_especifica: parseFloat(row.humedad_especifica) || 0,
         velocidad_viento: parseFloat(row.velocidad_viento) || 0,
         velocidad_viento_max: parseFloat(row.velocidad_viento_max) || 0,
         velocidad_viento_min: parseFloat(row.velocidad_viento_min) || 0,
+        radiacion_onda_larga: parseFloat(row.radiacion_onda_larga) || 0,
         radiacion_onda_corta: parseFloat(row.radiacion_onda_corta) || 0,
-        presion_superficie: parseFloat(row.presion_superficie) || 0,
+        radiacion_cielo_despejado: parseFloat(row.radiacion_cielo_despejado) || 0,
+        indice_claridad: parseFloat(row.indice_claridad) || 0,
         evaporacion: parseFloat(row.evaporacion) || 0,
+        presion_superficie: parseFloat(row.presion_superficie) || 0,
       } : null,
     }));
 
