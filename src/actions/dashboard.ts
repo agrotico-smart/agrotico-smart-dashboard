@@ -128,6 +128,7 @@ export async function generateNewRecord(robotUuid: string) {
     const temperatura_superficie = (parseFloat(temperatura_2m) + Math.random() * 10 - 5).toFixed(2);
     const precipitacion_corregida = (Math.random() * 20).toFixed(2);
     const humedad_relativa = (40 + Math.random() * 40).toFixed(2);
+    // humedad_especifica es aproximadamente 10% de humedad_relativa (simplificación para datos de prueba)
     const humedad_especifica = (parseFloat(humedad_relativa) * 0.1).toFixed(2);
     const velocidad_viento = (Math.random() * 10).toFixed(2);
     const velocidad_viento_max = (parseFloat(velocidad_viento) + Math.random() * 5).toFixed(2);
