@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
           FROM clima_satelital
           GROUP BY robot_uuid
         ) cs2 ON cs1.robot_uuid = cs2.robot_uuid AND cs1.timestamp = cs2.max_timestamp
-      ) csb ON l.robot_uuid = csb.robot_uuid AND cs.robot_uuid IS NULL
+      ) csb ON l.robot_uuid = csb.robot_uuid AND cs.lectura_id IS NULL
       WHERE l.timestamp = (
         SELECT MAX(timestamp) 
         FROM lecturas l2 
