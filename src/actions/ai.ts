@@ -89,11 +89,19 @@ export async function getCurrentSensorData(robotUuid?: string) {
       [lecturaId]
     );
 
-    // Obtener datos del satélite
-    const [climateCurrent] = await pool.query<RowDataPacket[]>(
+    // Obtener datos del satélite - try by lectura_id first, then fallback to robot_uuid
+    let [climateCurrent] = await pool.query<RowDataPacket[]>(
       `SELECT * FROM clima_satelital WHERE lectura_id = ? ORDER BY timestamp DESC LIMIT 1`,
       [lecturaId]
     );
+    
+    // If no data found for this specific reading, get the most recent data for this robot
+    if (climateCurrent.length === 0 && robotUuid) {
+      [climateCurrent] = await pool.query<RowDataPacket[]>(
+        `SELECT * FROM clima_satelital WHERE robot_uuid = ? ORDER BY timestamp DESC LIMIT 1`,
+        [robotUuid]
+      );
+    }
 
     return {
       id: lectura.id,

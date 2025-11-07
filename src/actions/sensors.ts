@@ -287,10 +287,19 @@ export async function getCurrentSensorData(robotUuid: string): Promise<{
       [lecturaId]
     );
 
-    const [climaRows] = await pool.query<RowDataPacket[]>(
+    // Try to get climate data by lectura_id first, then fallback to robot_uuid
+    let [climaRows] = await pool.query<RowDataPacket[]>(
       `SELECT * FROM clima_satelital WHERE lectura_id = ? ORDER BY timestamp DESC LIMIT 1`,
       [lecturaId]
     );
+    
+    // If no data found for this specific reading, get the most recent data for this robot
+    if (climaRows.length === 0) {
+      [climaRows] = await pool.query<RowDataPacket[]>(
+        `SELECT * FROM clima_satelital WHERE robot_uuid = ? ORDER BY timestamp DESC LIMIT 1`,
+        [robotUuid]
+      );
+    }
 
     // Validar y limpiar datos de sensores
     const tempCelsius = parseFloat(bmp390Rows[0]?.temperatura_celsius || "0");
