@@ -75,7 +75,6 @@ export type WidgetType =
   | "metrics"
   | "sensors"
   | "weather"
-  | "satellite"
   | "temperature"
   | "humidity"
   | "pressure";
@@ -541,19 +540,6 @@ export default function RobotDashboard({
             color: "bg-blue-50 border-blue-200",
             iconColor: "bg-blue-500",
           };
-        case "satellite":
-          return {
-            icon: <Satellite className="h-6 w-6 text-indigo-500" />,
-            title: "Datos Satelitales",
-            value: sensorData?.climate?.temperatura_2m
-              ? `${sensorData.climate.temperatura_2m.toFixed(1)}°C`
-              : "N/A",
-            subtitle: sensorData?.climate?.precipitacion_corregida
-              ? `${sensorData.climate.precipitacion_corregida.toFixed(1)}mm`
-              : "Sin datos",
-            color: "bg-indigo-50 border-indigo-200",
-            iconColor: "bg-indigo-500",
-          };
         case "temperature":
           return {
             icon: <Thermometer className="h-6 w-6 text-red-500" />,
@@ -668,7 +654,7 @@ export default function RobotDashboard({
       (type) => type === "map" || type === "chart"
     );
     const smallWidgets = widgetOrder.filter((type) =>
-      ["weather", "satellite", "temperature", "humidity", "pressure"].includes(
+      ["weather", "temperature", "humidity", "pressure"].includes(
         type
       )
     );
@@ -700,7 +686,7 @@ export default function RobotDashboard({
   }, [widgetOrder, isDragMode, sensorData, historicalData, robot]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div id="widget-selector" className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Header Simplificado */}
       <div className="bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-3 sm:py-4">
@@ -762,7 +748,20 @@ export default function RobotDashboard({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setShowAddWidget(!showAddWidget)}
+                onClick={() => {
+                  setShowAddWidget((prev) => {
+                    const newState = !prev;
+                    if (!prev) {
+                      // Espera al render del menú y luego hace scroll suave
+                      setTimeout(() => {
+                        document
+                          .getElementById("widget-selector")
+                          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }, 100);
+                    }
+                    return newState;
+                  });
+                }}
                 className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm"
               >
                 <Plus className="h-3 sm:h-4 w-3 sm:w-4" />
@@ -875,30 +874,6 @@ export default function RobotDashboard({
                   <div>
                     <h4 className="font-medium text-slate-800 text-sm">
                       Clima
-                    </h4>
-                    <p className="text-xs text-slate-600">Widget pequeño</p>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                  widgetOrder.includes("satellite")
-                    ? "border-gray-300 bg-gray-50 opacity-50 cursor-not-allowed"
-                    : "border-indigo-200 bg-indigo-50 hover:border-indigo-300 hover:bg-indigo-100"
-                }`}
-                onClick={() => {
-                  if (!widgetOrder.includes("satellite")) {
-                    setWidgetOrder([...widgetOrder, "satellite"]);
-                    setShowAddWidget(false);
-                  }
-                }}
-              >
-                <div className="flex items-center space-x-2">
-                  <Satellite className="h-5 w-5 text-indigo-500" />
-                  <div>
-                    <h4 className="font-medium text-slate-800 text-sm">
-                      Datos Satelitales
                     </h4>
                     <p className="text-xs text-slate-600">Widget pequeño</p>
                   </div>
@@ -1055,16 +1030,6 @@ export default function RobotDashboard({
                         <Cloud className="h-6 w-6 text-blue-500 mx-auto mb-1" />
                         <p className="text-xs font-medium text-blue-700">
                           Clima
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  {activeId === "satellite" && (
-                    <div className="w-48 h-24 bg-indigo-100 rounded-lg border-2 border-indigo-300 flex items-center justify-center">
-                      <div className="text-center">
-                        <Satellite className="h-6 w-6 text-indigo-500 mx-auto mb-1" />
-                        <p className="text-xs font-medium text-indigo-700">
-                          Datos Satelitales
                         </p>
                       </div>
                     </div>

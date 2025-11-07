@@ -890,50 +890,154 @@ export default function RobotCharts({
         })}
       </div>
 
-      {/* Datos climáticos */}
+      {/* Datos climáticos satelitales */}
       {sensorData?.climate && (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base sm:text-lg">
-              Datos Climáticos Satelitales
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <Thermometer className="h-5 w-5 text-blue-600 mx-auto mb-1" />
-                <p className="text-xs font-medium text-slate-600">Temp. 2m</p>
-                <p className="text-lg font-bold text-slate-900">
-                  {sensorData.climate.temperatura_2m.toFixed(1)}°C
-                </p>
-              </div>
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <Wind className="h-5 w-5 text-green-600 mx-auto mb-1" />
-                <p className="text-xs font-medium text-slate-600">Viento</p>
-                <p className="text-lg font-bold text-slate-900">
-                  {sensorData.climate.velocidad_viento.toFixed(1)} m/s
-                </p>
-              </div>
-              <div className="text-center p-3 bg-yellow-50 rounded-lg">
-                <Zap className="h-5 w-5 text-yellow-600 mx-auto mb-1" />
-                <p className="text-xs font-medium text-slate-600">Radiación</p>
-                <p className="text-lg font-bold text-slate-900">
-                  {sensorData.climate.radiacion_onda_corta.toFixed(0)} W/m²
-                </p>
-              </div>
-              <div className="text-center p-3 bg-purple-50 rounded-lg">
-                <Droplets className="h-5 w-5 text-purple-600 mx-auto mb-1" />
-                <p className="text-xs font-medium text-slate-600">
-                  Precipitación
-                </p>
-                <p className="text-lg font-bold text-slate-900">
-                  {sensorData.climate.precipitacion_corregida.toFixed(1)} mm
-                </p>
-              </div>
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+            <Sun className="h-5 w-5 text-yellow-500" />
+            Datos Climáticos Satelitales
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {/* 🌡️ Temperaturas */}
+            <div className="text-center p-3 bg-blue-50 rounded-lg">
+              <Thermometer className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Temp. 2m</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.temperatura_2m?.toFixed(1) ?? "N/A"}°C
+              </p>
             </div>
-          </CardContent>
-        </Card>
+
+            <div className="text-center p-3 bg-blue-50 rounded-lg">
+              <Maximize2 className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Temp. Máx.</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.temperatura_maxima?.toFixed(1) ?? "N/A"}°C
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-blue-50 rounded-lg">
+              <Minimize2 className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Temp. Mín.</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.temperatura_minima?.toFixed(1) ?? "N/A"}°C
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-blue-50 rounded-lg">
+              <TrendingUp className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Rango Temp.</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.rango_temperatura?.toFixed(1) ?? "N/A"}°C
+              </p>
+            </div>
+
+            {/* 💧 Humedad */}
+            <div className="text-center p-3 bg-purple-50 rounded-lg">
+              <Droplets className="h-5 w-5 text-purple-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Humedad Relativa</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.humedad_relativa?.toFixed(1) ?? "N/A"}%
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-purple-50 rounded-lg">
+              <Droplets className="h-5 w-5 text-purple-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Humedad Específica</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.humedad_especifica?.toFixed(3) ?? "N/A"} kg/kg
+              </p>
+            </div>
+
+            {/* 💨 Viento */}
+            <div className="text-center p-3 bg-green-50 rounded-lg">
+              <Wind className="h-5 w-5 text-green-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Vel. Viento</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.velocidad_viento?.toFixed(1) ?? "N/A"} m/s
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-green-50 rounded-lg">
+              <Maximize2 className="h-5 w-5 text-green-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Vel. Máx. Viento</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.velocidad_viento_max?.toFixed(1) ?? "N/A"} m/s
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-green-50 rounded-lg">
+              <Minimize2 className="h-5 w-5 text-green-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Vel. Mín. Viento</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.velocidad_viento_min?.toFixed(1) ?? "N/A"} m/s
+              </p>
+            </div>
+
+            {/* ☀️ Radiación */}
+            <div className="text-center p-3 bg-yellow-50 rounded-lg">
+              <Zap className="h-5 w-5 text-yellow-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Rad. Onda Corta</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.radiacion_onda_corta?.toFixed(0) ?? "N/A"} W/m²
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-yellow-50 rounded-lg">
+              <Zap className="h-5 w-5 text-yellow-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Rad. Onda Larga</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.radiacion_onda_larga?.toFixed(0) ?? "N/A"} W/m²
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-yellow-50 rounded-lg">
+              <Sun className="h-5 w-5 text-yellow-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Cielo Despejado</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.radiacion_cielo_despejado?.toFixed(0) ?? "N/A"} W/m²
+              </p>
+            </div>
+
+            {/* 🌧️ Precipitación y otros */}
+            <div className="text-center p-3 bg-purple-50 rounded-lg">
+              <Droplets className="h-5 w-5 text-purple-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Precipitación</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.precipitacion_corregida?.toFixed(1) ?? "N/A"} mm
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-cyan-50 rounded-lg">
+              <BarChart3 className="h-5 w-5 text-cyan-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Presión Superficie</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.presion_superficie?.toFixed(1) ?? "N/A"} hPa
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-cyan-50 rounded-lg">
+              <Activity className="h-5 w-5 text-cyan-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Evaporación</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.evaporacion?.toFixed(1) ?? "N/A"} mm
+              </p>
+            </div>
+
+            <div className="text-center p-3 bg-cyan-50 rounded-lg">
+              <TrendingUp className="h-5 w-5 text-cyan-600 mx-auto mb-1" />
+              <p className="text-xs font-medium text-slate-600">Índice Claridad</p>
+              <p className="text-lg font-bold text-slate-900">
+                {sensorData.climate.indice_claridad?.toFixed(2) ?? "N/A"}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       )}
+
 
       {/* Spacing adicional al final */}
       <div className="h-8"></div>
