@@ -59,7 +59,9 @@ export async function getRobotsData(): Promise<{
 
     return {
       robots,
-      lastUpdate: new Date().toLocaleString("es-ES"),
+      lastUpdate: new Date().toLocaleString("es-ES", {
+        timeZone: "America/Costa_Rica",
+      }),
     };
   } catch (err: any) {
     console.error("Error loading robots from DB:", err);
@@ -67,7 +69,9 @@ export async function getRobotsData(): Promise<{
     // For now, we'll return an empty array
     return {
       robots: [],
-      lastUpdate: new Date().toLocaleString("es-ES"),
+      lastUpdate: new Date().toLocaleString("es-ES", {
+        timeZone: "America/Costa_Rica",
+      }),
     };
   }
 }

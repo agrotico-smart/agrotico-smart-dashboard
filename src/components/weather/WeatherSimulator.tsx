@@ -54,7 +54,11 @@ export default function WeatherSimulator({ region, crop, startDate }: WeatherSim
       const currentPrecip = Math.max(0, 5 + precipAdjustment[0] + mod.precip + precipVariation);
       
       data.push({
-        date: date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
+        date: date.toLocaleDateString('es-ES', { 
+          day: 'numeric', 
+          month: 'short',
+          timeZone: 'America/Costa_Rica'
+        }),
         temperatura: currentTemp,
         precipitacion: currentPrecip,
         rendimiento: calculateYieldImpact(currentTemp, currentPrecip, crop),

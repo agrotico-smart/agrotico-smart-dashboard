@@ -384,7 +384,13 @@ export default function RealtimeMetrics({
                 <span className="text-sm text-slate-500">total</span>
               </div>
               <p className="text-xs text-slate-400 mt-1">
-                Última actualización: {new Date().toLocaleTimeString()}
+                Última actualización:{" "}
+                {new Date().toLocaleTimeString("es-ES", {
+                  timeZone: "America/Costa_Rica",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                })}
               </p>
             </CardContent>
           </Card>

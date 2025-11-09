@@ -84,6 +84,10 @@ const parseTimestamp = (value: unknown) => {
   }
 
   if (typeof value === "string") {
+    // MySQL returns timestamps in the format "YYYY-MM-DD HH:MM:SS"
+    // Since we configured the DB connection with timezone: '-06:00',
+    // these timestamps are already in Costa Rica time.
+    // We need to parse them explicitly to avoid browser timezone conversion.
     const normalized = value.includes("T") ? value : value.replace(" ", "T");
     const parsed = new Date(normalized);
     return Number.isNaN(parsed.getTime()) ? null : parsed;
@@ -272,22 +276,32 @@ export default function RobotCharts({
       const showDate =
         timeRange === "7d" || timeRange === "30d" || timeRange === "custom";
 
+      // Formato de hora en Costa Rica (America/Costa_Rica timezone)
+      const timeOptions: Intl.DateTimeFormatOptions = {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "America/Costa_Rica",
+      };
+
+      const dateTimeOptions: Intl.DateTimeFormatOptions = {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "America/Costa_Rica",
+      };
+
+      const dateOptions: Intl.DateTimeFormatOptions = {
+        day: "2-digit",
+        month: "2-digit",
+        timeZone: "America/Costa_Rica",
+      };
+
       return {
         time: showDate
-          ? pointDate.toLocaleString("es-ES", {
-              day: "2-digit",
-              month: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-            })
-          : pointDate.toLocaleTimeString("es-ES", {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-        date: pointDate.toLocaleDateString("es-ES", {
-          day: "2-digit",
-          month: "2-digit",
-        }),
+          ? pointDate.toLocaleString("es-ES", dateTimeOptions)
+          : pointDate.toLocaleTimeString("es-ES", timeOptions),
+        date: pointDate.toLocaleDateString("es-ES", dateOptions),
         timestamp: point.timestamp,
         temperatura: point.temperatura_celsius,
         humedad: point.humedad_pct,
@@ -819,11 +833,15 @@ export default function RobotCharts({
               {timeRange === "custom"
                 ? `${
                     customStartDate
-                      ? new Date(customStartDate).toLocaleDateString("es-ES")
+                      ? new Date(customStartDate).toLocaleDateString("es-ES", {
+                          timeZone: "America/Costa_Rica",
+                        })
                       : "Inicio"
                   } - ${
                     customEndDate
-                      ? new Date(customEndDate).toLocaleDateString("es-ES")
+                      ? new Date(customEndDate).toLocaleDateString("es-ES", {
+                          timeZone: "America/Costa_Rica",
+                        })
                       : "Fin"
                   }`
                 : timeRange === "1h"

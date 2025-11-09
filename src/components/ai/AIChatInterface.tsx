@@ -596,7 +596,7 @@ export default function AIChatInterface({
       }
 
       // Generar reporte basado en la conversación y datos de sensores
-      const reportContent = `# Reporte Agrícola - ${new Date().toLocaleDateString()}
+      const reportContent = `# Reporte Agrícola - ${new Date().toLocaleDateString("es-ES", { timeZone: "America/Costa_Rica" })}
 
 ## 📊 Datos de Sensores
 
@@ -622,7 +622,7 @@ ${messages
   .join("\n\n")}
 
 ---
-*Reporte generado automáticamente el ${new Date().toLocaleString()}*
+*Reporte generado automáticamente el ${new Date().toLocaleString("es-ES", { timeZone: "America/Costa_Rica" })}*
 `;
 
       // Guardar reporte en la base de datos
@@ -644,7 +644,7 @@ ${messages
           content: `✅ **Reporte generado exitosamente**
 
 📊 **ID del Reporte**: ${result.id}
-📅 **Fecha**: ${new Date().toLocaleDateString()}
+📅 **Fecha**: ${new Date().toLocaleDateString("es-ES", { timeZone: "America/Costa_Rica" })}
 📝 **Contenido**: Incluye datos de sensores y conversación
 
 El reporte ha sido guardado en la base de datos y está disponible para consulta.`,

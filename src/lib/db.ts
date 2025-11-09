@@ -9,6 +9,7 @@ if (!config.database) {
 }
 
 // Create the connection pool.
+// Set timezone to Costa Rica (UTC-6) to ensure timestamps are returned correctly
 const pool = createPool({
   host: config.database.host,
   user: config.database.user,
@@ -17,7 +18,8 @@ const pool = createPool({
   port: config.database.port,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  timezone: '-06:00' // Costa Rica timezone (UTC-6)
 });
 
 export default pool;

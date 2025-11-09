@@ -295,7 +295,9 @@ function generateIntelligentResponse(messages: any[], currentSensorData: any) {
     normalizedMessage.includes("posicion del robot");
 
   const dataTimestamp = currentSensorData?.timestamp
-    ? new Date(currentSensorData.timestamp).toLocaleString("es-ES")
+    ? new Date(currentSensorData.timestamp).toLocaleString("es-ES", {
+        timeZone: "America/Costa_Rica",
+      })
     : null;
 
   if (asksForLocation) {

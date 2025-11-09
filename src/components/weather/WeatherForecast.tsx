@@ -92,6 +92,7 @@ export default function WeatherForecast({
             date: new Date(date).toLocaleDateString("es-ES", {
               weekday: "short",
               day: "numeric",
+              timeZone: "America/Costa_Rica",
             }),
             temperatura:
               (data.daily.temperature_2m_max[i] +
