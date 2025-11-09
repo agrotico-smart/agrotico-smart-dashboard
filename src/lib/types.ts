@@ -115,3 +115,42 @@ export interface AIAnalysis {
   factores_riesgo: string[];
   oportunidades_optimizacion: string[];
 }
+
+// Tipos para precios de mercado agrícola
+export interface MarketPrice {
+  id: string;
+  producto: string;
+  precio_actual: number;
+  unidad: string;
+  region: string;
+  fecha: string;
+  precio_anterior?: number;
+  cambio_porcentual?: number;
+  tendencia?: 'subida' | 'bajada' | 'estable';
+}
+
+export interface MarketPriceHistory {
+  producto: string;
+  region: string;
+  historial: Array<{
+    fecha: string;
+    precio: number;
+  }>;
+}
+
+export interface MarketPriceAlert {
+  id: string;
+  producto: string;
+  tipo: 'subida' | 'bajada';
+  cambio_porcentual: number;
+  precio_anterior: number;
+  precio_actual: number;
+  fecha: string;
+  region: string;
+}
+
+export interface MarketPriceData {
+  precios: MarketPrice[];
+  alertas: MarketPriceAlert[];
+  ultima_actualizacion: string;
+}
