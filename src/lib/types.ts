@@ -115,3 +115,23 @@ export interface AIAnalysis {
   factores_riesgo: string[];
   oportunidades_optimizacion: string[];
 }
+
+// Tipos para noticias agrícolas
+export interface NewsArticle {
+  id: string;
+  title: string;
+  description: string;
+  content?: string;
+  link: string;
+  pubDate: string;
+  source: string;
+  imageUrl?: string;
+  categories?: string[];
+}
+
+export interface NewsResponse {
+  success: boolean;
+  articles: NewsArticle[];
+  lastUpdate: string;
+  error?: string;
+}

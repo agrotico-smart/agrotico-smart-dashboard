@@ -8,6 +8,7 @@ import {
   Settings,
   Menu,
   Cloud,
+  Newspaper,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -121,6 +122,19 @@ export default function RootLayoutClient({ children }: RootLayoutClientProps) {
                 Clima
               </Link>
             </li>
+            <li>
+              <Link
+                href="/noticias"
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-200 ${
+                  pathname === "/noticias"
+                    ? "bg-blue-50 text-blue-700 border-l-4 border-blue-600"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                }`}
+              >
+                <Newspaper className="h-4 w-4" />
+                Noticias
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className="mt-auto p-4 border-t border-slate-200 flex-shrink-0">
@@ -209,6 +223,17 @@ export default function RootLayoutClient({ children }: RootLayoutClientProps) {
                 >
                   <Cloud className="h-5 w-5" />
                   Clima
+                </Link>
+                <Link
+                  href="/noticias"
+                  className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 transition-all duration-200 ${
+                    pathname === "/noticias"
+                      ? "bg-blue-50 text-blue-700 border-l-4 border-blue-600"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  }`}
+                >
+                  <Newspaper className="h-5 w-5" />
+                  Noticias
                 </Link>
                 <Link
                   href="/settings"
