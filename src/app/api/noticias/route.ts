@@ -56,19 +56,16 @@ function extractImageFromContent(content: string | undefined): string | undefine
 
 /**
  * Limpia el HTML del contenido
+ * React se encarga del escape automático, así que solo removemos las etiquetas HTML
  */
 function cleanHtmlContent(html: string | undefined): string {
   if (!html) return "";
   
-  // Remover etiquetas HTML
+  // Remover etiquetas HTML y normalizar espacios
+  // No decodificamos entidades HTML manualmente para evitar double-escaping
+  // React se encargará del escape correcto al renderizar
   return html
     .replace(/<[^>]*>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
     .replace(/\s+/g, " ")
     .trim();
 }
